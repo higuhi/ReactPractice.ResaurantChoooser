@@ -17,6 +17,7 @@ const App = () => {
   return (
     <NavigationContainer>
      <Tab.Navigator
+        initialRouteName="Decision"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let image = null;
@@ -44,6 +45,8 @@ const App = () => {
           activeTintColor: 'tomato',
           inactiveTintColor: 'gray',
         }}
+        backBehavior="none"
+        lazy={true}
       >
         <Tab.Screen name="People" component={PeopleScreen} />
         <Tab.Screen name="Decision" component={DecisionScreen} />
