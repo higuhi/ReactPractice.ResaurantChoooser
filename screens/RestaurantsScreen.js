@@ -7,46 +7,152 @@ import Store from "react-native-fs-store";
 
 import CustomButton from '../components/CustomButton.js';
 import CustomTextInput from '../components/CustomTextInput.js';
+import ListScreen from './ListScreen.js';
+import AddScreen from './AddScreen.js';
 
-const Storage = new Store('Restaurants');
+const Storage = new Store('Default');
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  listScreenContainer: {
-    flex: 1, 
-    alignItems: "center",
-    justifyContent: "center", 
-    ...Platform.select({
-      ios: {},
-      android: {}
-    })
-  },
-  restaurantList: {
-    width: "94%"
-  },
-  restaurantContainer: {
-    flexDirection: "row",
-    marginTop: 4,
-    marginBottom: 4,
-    borderColor: "#e0e0e0",
-    borderBottomWidth: 2,
-    alignItems: "center"
-  },
-  restaurantName: {
-    flex: 1,
-    color: "black",
-  },
-  fieldLabel: {
-    marginLeft: 10
-  }
+    listScreenContainer: {
+        flex: 1, 
+        alignItems: "center",
+        justifyContent: "center", 
+        ...Platform.select({
+        ios: {},
+        android: {}
+        })
+    },
+    listContainer: {
+        width: "94%"
+    },
+    itemContainer: {
+        flexDirection: "row",
+        marginTop: 4,
+        marginBottom: 4,
+        borderColor: "#e0e0e0",
+        borderBottomWidth: 2,
+        alignItems: "center"
+    },
+    itemName: {
+        flex: 1,
+        color: "black",
+    },
+    fieldLabel: {
+        marginLeft: 10
+    },
+    addScreenContainer: {},
+    addScreenFormContainer: {},
 });
 
-class ListScreen extends Component { 
+const RestaurantListScreen = (props) => {
+    return (
+        <ListScreen store={Storage} storeName='restaurants' navigation={props.navigation} styles={styles}> 
+            <CustomButton text="Add Restaurant" width="80%" onPress={ () => { props.navigation.navigate("AddScreen"); } } />
+        </ListScreen>
+    );
+};
+
+class RestaurantAddScreen extends Component { 
+    
+    constructor(props) {
+        super(props);
+        this.state = { 
+            name: "",
+            cuisine: "",
+            price: "",
+            rating: "",
+            phone: "",
+            address: "",
+            website: "",
+            delivery: "",
+            key: `r_${new Date().getTime()}`  
+        };
+    }
+
+    render() {
+        return (
+            <AddScreen store={Storage} storeName='restaurants' navigation={this.props.navigation} stateHolder={this} styles={styles}> 
+                <View style={styles.addScreenInnerContainer}>
+                
+                <CustomTextInput label="Name" maxLength={20} stateHolder={this} stateFieldName="name" />
+                
+                <Text style={styles.fieldLabel}>Cuisines</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker style={styles.picker} 
+                    prompt="Cuisine"
+                    selectedValue={this.state.cuisine}
+                    onValueChange={(inItemValue)=>{this.setState({cuisine:inItemValue})}}>
+                        <Picker.Item label="" value=""/>
+                        <Picker.Item label="Danish" value="Danish"/>
+                        <Picker.Item label="American" value="American"/>
+                        <Picker.Item label="Japanese" value="Japanese"/>
+                    </Picker>
+                </View>
+        
+                <Text style={styles.fieldLabel}>Price</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker style={styles.picker} 
+                    prompt="Price"
+                    selectedValue={this.state.price}
+                    onValueChange={(inItemValue)=>{this.setState({price:inItemValue})}}>
+                        <Picker.Item label="" value=""/>
+                        <Picker.Item label="Very Low" value="Very Low"/>
+                        <Picker.Item label="Low" value="Low"/>
+                        <Picker.Item label="Medium" value="Medium"/>
+                        <Picker.Item label="High" value="High"/>
+                    </Picker>
+                </View>
+        
+                <Text style={styles.fieldLabel}>Rating</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker style={styles.picker} 
+                    prompt="Rating"
+                    selectedValue={this.state.rating}
+                    onValueChange={(inItemValue)=>{this.setState({rating:inItemValue})}}>
+                        <Picker.Item label="" value=""/>
+                        <Picker.Item label="★" value="★"/>
+                        <Picker.Item label="★★" value="★★"/>
+                        <Picker.Item label="★★★" value="★★★"/>
+                    </Picker>
+                </View>
+        
+                <CustomTextInput label="Phone Number" maxLength={20} stateHolder={this} stateFieldName="phone" />
+        
+                <CustomTextInput label="Address" maxLength={20} stateHolder={this} stateFieldName="address" />
+        
+                <CustomTextInput label="Website" maxLength={20} stateHolder={this} stateFieldName="website" />
+        
+                </View>
+        
+            </AddScreen>
+        );  
+    }
+}
+
+
+const Stack = createStackNavigator();
+
+const RestaurantsScreen = () => {
+    return (
+        <Stack.Navigator>
+        <Stack.Screen name="ListScreen" component={RestaurantListScreen} />
+        <Stack.Screen name="AddScreen" component={RestaurantAddScreen} />
+        </Stack.Navigator>
+    );
+};
+
+exports.RestaurantsScreen = RestaurantsScreen;
+
+
+/*---------- following code is going to be deleted ------- */
+
+
+
+
+
+
+
+class OldListScreen extends Component { 
   constructor(props) {
     super(props);
     this.state = { listData: [] };
@@ -154,7 +260,7 @@ class ListScreen extends Component {
   }
 }
 
-class AddScreen extends Component { 
+class OldAddScreen extends Component { 
   constructor(props) {
     super(props);
     this.state = { 
@@ -259,16 +365,3 @@ class AddScreen extends Component {
   }
 }
 
-
-const Stack = createStackNavigator();
-
-const RestaurantsScreen = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="ListScreen" component={ListScreen} />
-      <Stack.Screen name="AddScreen" component={AddScreen} />
-    </Stack.Navigator>
-  );
-};
-
-exports.RestaurantsScreen = RestaurantsScreen;
