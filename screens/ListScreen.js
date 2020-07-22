@@ -107,7 +107,7 @@ export default class ListScreen extends Component {
                                 <CustomButton text="Delete" onPress={ () => {
                                     Alert.alert(
                                         "Please confirm", 
-                                        "Are you sure you want to delete this restaurant",
+                                        "Are you sure you want to delete this item?",
                                         [
                                             {text: "Yes", onPress: () => {this.removeFromList(item.item.key)}},
                                             {text: "No" },

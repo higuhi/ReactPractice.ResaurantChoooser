@@ -9,9 +9,11 @@ import CustomTextInput from '../components/CustomTextInput.js';
 import ListScreen from './ListScreen.js';
 import AddScreen from './AddScreen.js';
 
+const Stack = createStackNavigator();
+
 const Storage = new Store('Default');
 
-const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
     listScreenContainer: {
         flex: 1, 
         alignItems: "center",
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
 
 const PeopleListScreen = (props) => {
     return (
-        <ListScreen store={Storage} storeName='people' navigation={props.navigation} styles={styles}> 
+        <ListScreen store={Storage} storeName='people' navigation={props.navigation} styles={Styles}> 
           <CustomButton text="Add Friend" width="80%" onPress={ () => { props.navigation.navigate("AddScreen"); } } />
         </ListScreen>
     );
@@ -65,8 +67,8 @@ class PeopleAddScreen extends Component {
 
     render() {
         return (
-            <AddScreen store={Storage} storeName='people' navigation={this.props.navigation} stateHolder={this} styles={styles}> 
-                <View style={styles.addScreenInnerContainer}>                
+            <AddScreen store={Storage} storeName='people' navigation={this.props.navigation} stateHolder={this} styles={Styles}> 
+                <View style={Styles.addScreenInnerContainer}>                
                   <CustomTextInput label="Name" maxLength={20} stateHolder={this} stateFieldName="name" />
                   <CustomTextInput label="Phone" maxLength={20} stateHolder={this} stateFieldName="phone" />
                   <CustomTextInput label="E-mail" maxLength={20} stateHolder={this} stateFieldName="email" />
@@ -76,14 +78,11 @@ class PeopleAddScreen extends Component {
     }
 }
 
-
-const Stack = createStackNavigator();
-
 const PeopleScreen = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="ListScreen" component={PeopleListScreen} />
-            <Stack.Screen name="AddScreen" component={PeopleAddScreen} />
+            <Stack.Screen name="ListScreen" component={PeopleListScreen} options={{title: 'Friends'}}/>
+            <Stack.Screen name="AddScreen" component={PeopleAddScreen} options={{title: 'Add Friend'}}/>
         </Stack.Navigator>
     );
 };
